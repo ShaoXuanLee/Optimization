@@ -1,0 +1,21 @@
+B 3 C o m p i l a t i o n
+B 70 Equation Listing    SOLVE forest Using LP From line 47
+D 73 obj
+D 78 con_land
+D 89 con_tree
+B 101 Column Listing      SOLVE forest Using LP From line 47
+E 104 profit
+E 111 grow
+B 134 Range Statistics    SOLVE forest Using LP From line 47
+B 145 Model Statistics    SOLVE forest Using LP From line 47
+B 158 Solution Report     SOLVE forest Using LP From line 47
+F 191 obj
+F 193 con_land
+F 202 con_tree
+G 213 profit
+G 215 grow
+B 242 E x e c u t i o n
+I 244 mstat
+I 245 sstat
+I 247 profit
+I 248 grow

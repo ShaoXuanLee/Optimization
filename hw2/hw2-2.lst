@@ -1,0 +1,643 @@
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  set items Bed. Desk. Chair. bedFrame.CoFfeetable /B, D, C, F, CF/;
+   2  set r resources. Hours.Metal.Wood /H, M, W/;
+   3   
+   4  Parameter
+   5      net_p(items) profit of each item /B 19, D 13, C 12, F 17, CF 14/,
+   6      constrain(r) constrain on each resources /H 225, M 117, W 420/,
+   7      build(r, items) resource require to build an item /H.B 3, H.D 2, H.C 1, H.F 2, H.CF 3,
+   8                                                         M.B 1, M.D 1, M.C 1, M.F 1, M.CF 1,
+   9                                                         W.B 4, W.D 3, W.C 3, W.F 4, W.CF 2/;
+  10  free Variable
+  11      profit;
+  12   
+  13  positive Variable
+  14      produce(items);
+  15   
+  16  equations
+  17      profit_eq,
+  18      resource_con(r);
+  19   
+  20  profit_eq..
+  21      profit =e= sum(items, net_p(items) * produce(items));
+  22   
+  23  resource_con(r)..
+  24      sum(items, build(r,items)*produce(items) ) =l= constrain(r);
+  25   
+  26  model books /all/;
+  27  produce.up("CF") = 0;
+  28  solve books using lp maximizing profit;
+  29  parameter resprof(*);
+  30  resprof('2.1') = profit.l;
+  31   
+  32  net_p("D") = 15;
+  33  solve books using lp maximizing profit;
+  34  resprof('2.2.1') = profit.l;
+  35   
+  36  constrain("M") = 125;
+  37  solve books using lp maximizing profit;
+  38  resprof('2.2.2') = profit.l;
+  39   
+  40  produce.up("CF") = +INF;
+  41  solve books using lp maximizing profit;
+  42  resprof('2.2.3') = profit.l;
+  43  display resprof, produce.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.3.0 8b8fb1cb WEX-WEI
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE books Using LP From line 28
+
+
+---- profit_eq  =E=  
+
+profit_eq..  profit - 19*produce(B) - 13*produce(D) - 12*produce(C) - 17*produce(F) - 14*produce(CF) =E= 0 ; (LHS = 0)
+     
+
+---- resource_con  =L=  
+
+resource_con(H)..  3*produce(B) + 2*produce(D) + produce(C) + 2*produce(F) + 3*produce(CF) =L= 225 ; (LHS = 0)
+     
+resource_con(M)..  produce(B) + produce(D) + produce(C) + produce(F) + produce(CF) =L= 117 ; (LHS = 0)
+     
+resource_con(W)..  4*produce(B) + 3*produce(D) + 3*produce(C) + 4*produce(F) + 2*produce(CF) =L= 420 ; (LHS = 0)
+     
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE books Using LP From line 28
+
+
+---- profit  
+
+profit
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       profit_eq
+
+
+---- produce  
+
+produce(B)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -19       profit_eq
+        3       resource_con(H)
+        1       resource_con(M)
+        4       resource_con(W)
+
+produce(D)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -13       profit_eq
+        2       resource_con(H)
+        1       resource_con(M)
+        3       resource_con(W)
+
+produce(C)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -12       profit_eq
+        1       resource_con(H)
+        1       resource_con(M)
+        3       resource_con(W)
+
+REMAINING 2 ENTRIES SKIPPED
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE books Using LP From line 28
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.170E+02, 4.200E+02] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.900E+01]
+
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE books Using LP From line 28
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            4
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            6
+NON ZERO ELEMENTS            21
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  44.3.0 8b8fb1cb WEX-WEI
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE books Using LP From line 28
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   books               OBJECTIVE  profit
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  28
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE             1827.0000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         3    2147483647
+--- GAMS/CPLEX licensed for continuous and discrete problems.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.01 ticks)
+
+
+Optimal solution found
+Objective:         1827.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU profit_eq           .              .              .             1.0000      
+
+---- EQU resource_con  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+H        -INF          225.0000       225.0000         2.0000      
+M        -INF          117.0000       117.0000         1.0000      
+W        -INF          420.0000       420.0000         3.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR profit            -INF         1827.0000        +INF             .          
+
+---- VAR produce  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+B           .            39.0000        +INF             .          
+D           .              .            +INF           -1.0000      
+C           .            48.0000        +INF             .          
+F           .            30.0000        +INF             .          
+CF          .              .              .             1.0000      
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE books Using LP From line 33
+
+
+---- profit_eq  =E=  
+
+profit_eq..  profit - 19*produce(B) - 15*produce(D) - 12*produce(C) - 17*produce(F) - 14*produce(CF) =E= 0 ; (LHS = 0)
+     
+
+---- resource_con  =L=  
+
+resource_con(H)..  3*produce(B) + 2*produce(D) + produce(C) + 2*produce(F) + 3*produce(CF) =L= 225 ; (LHS = 225)
+     
+resource_con(M)..  produce(B) + produce(D) + produce(C) + produce(F) + produce(CF) =L= 117 ; (LHS = 117)
+     
+resource_con(W)..  4*produce(B) + 3*produce(D) + 3*produce(C) + 4*produce(F) + 2*produce(CF) =L= 420 ; (LHS = 420)
+     
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 8
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE books Using LP From line 33
+
+
+---- profit  
+
+profit
+                (.LO, .L, .UP, .M = -INF, 1827, +INF, 0)
+        1       profit_eq
+
+
+---- produce  
+
+produce(B)
+                (.LO, .L, .UP, .M = 0, 39, +INF, 0)
+      -19       profit_eq
+        3       resource_con(H)
+        1       resource_con(M)
+        4       resource_con(W)
+
+produce(D)
+                (.LO, .L, .UP, .M = 0, 0, +INF, -1)
+      -15       profit_eq
+        2       resource_con(H)
+        1       resource_con(M)
+        3       resource_con(W)
+
+produce(C)
+                (.LO, .L, .UP, .M = 0, 48, +INF, 0)
+      -12       profit_eq
+        1       resource_con(H)
+        1       resource_con(M)
+        3       resource_con(W)
+
+REMAINING 2 ENTRIES SKIPPED
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 9
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE books Using LP From line 33
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.170E+02, 4.200E+02] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.900E+01]
+
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 10
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE books Using LP From line 33
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            4
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            6
+NON ZERO ELEMENTS            21
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  44.3.0 8b8fb1cb WEX-WEI
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 11
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE books Using LP From line 33
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   books               OBJECTIVE  profit
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  33
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE             1866.0000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         1    2147483647
+--- GAMS/CPLEX licensed for continuous and discrete problems.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.01 ticks)
+
+
+Optimal solution found
+Objective:         1866.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU profit_eq           .              .              .             1.0000      
+
+---- EQU resource_con  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+H        -INF          225.0000       225.0000         3.0000      
+M        -INF          117.0000       117.0000         3.0000      
+W        -INF          420.0000       420.0000         2.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR profit            -INF         1866.0000        +INF             .          
+
+---- VAR produce  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+B           .              .            +INF           -1.0000      
+D           .            39.0000        +INF             .          
+C           .             9.0000        +INF             .          
+F           .            69.0000        +INF             .          
+CF          .              .              .            -2.0000      
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 12
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE books Using LP From line 37
+
+
+---- profit_eq  =E=  
+
+profit_eq..  profit - 19*produce(B) - 15*produce(D) - 12*produce(C) - 17*produce(F) - 14*produce(CF) =E= 0 ; (LHS = 0)
+     
+
+---- resource_con  =L=  
+
+resource_con(H)..  3*produce(B) + 2*produce(D) + produce(C) + 2*produce(F) + 3*produce(CF) =L= 225 ; (LHS = 225)
+     
+resource_con(M)..  produce(B) + produce(D) + produce(C) + produce(F) + produce(CF) =L= 125 ; (LHS = 117)
+     
+resource_con(W)..  4*produce(B) + 3*produce(D) + 3*produce(C) + 4*produce(F) + 2*produce(CF) =L= 420 ; (LHS = 420)
+     
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 13
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE books Using LP From line 37
+
+
+---- profit  
+
+profit
+                (.LO, .L, .UP, .M = -INF, 1866, +INF, 0)
+        1       profit_eq
+
+
+---- produce  
+
+produce(B)
+                (.LO, .L, .UP, .M = 0, 0, +INF, -1)
+      -19       profit_eq
+        3       resource_con(H)
+        1       resource_con(M)
+        4       resource_con(W)
+
+produce(D)
+                (.LO, .L, .UP, .M = 0, 39, +INF, 0)
+      -15       profit_eq
+        2       resource_con(H)
+        1       resource_con(M)
+        3       resource_con(W)
+
+produce(C)
+                (.LO, .L, .UP, .M = 0, 9, +INF, 0)
+      -12       profit_eq
+        1       resource_con(H)
+        1       resource_con(M)
+        3       resource_con(W)
+
+REMAINING 2 ENTRIES SKIPPED
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 14
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE books Using LP From line 37
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.250E+02, 4.200E+02] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.900E+01]
+
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 15
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE books Using LP From line 37
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            4
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            6
+NON ZERO ELEMENTS            21
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  44.3.0 8b8fb1cb WEX-WEI
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 16
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE books Using LP From line 37
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   books               OBJECTIVE  profit
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  37
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE             1890.0000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+--- GAMS/CPLEX licensed for continuous and discrete problems.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.01 ticks)
+
+
+Optimal solution found
+Objective:         1890.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU profit_eq           .              .              .             1.0000      
+
+---- EQU resource_con  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+H        -INF          225.0000       225.0000         3.0000      
+M        -INF          125.0000       125.0000         3.0000      
+W        -INF          420.0000       420.0000         2.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR profit            -INF         1890.0000        +INF             .          
+
+---- VAR produce  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+B           .              .            +INF           -1.0000      
+D           .            55.0000        +INF             .          
+C           .            25.0000        +INF             .          
+F           .            45.0000        +INF             .          
+CF          .              .              .            -2.0000      
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 17
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE books Using LP From line 41
+
+
+---- profit_eq  =E=  
+
+profit_eq..  profit - 19*produce(B) - 15*produce(D) - 12*produce(C) - 17*produce(F) - 14*produce(CF) =E= 0 ; (LHS = 0)
+     
+
+---- resource_con  =L=  
+
+resource_con(H)..  3*produce(B) + 2*produce(D) + produce(C) + 2*produce(F) + 3*produce(CF) =L= 225 ; (LHS = 225)
+     
+resource_con(M)..  produce(B) + produce(D) + produce(C) + produce(F) + produce(CF) =L= 125 ; (LHS = 125)
+     
+resource_con(W)..  4*produce(B) + 3*produce(D) + 3*produce(C) + 4*produce(F) + 2*produce(CF) =L= 420 ; (LHS = 420)
+     
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 18
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE books Using LP From line 41
+
+
+---- profit  
+
+profit
+                (.LO, .L, .UP, .M = -INF, 1890, +INF, 0)
+        1       profit_eq
+
+
+---- produce  
+
+produce(B)
+                (.LO, .L, .UP, .M = 0, 0, +INF, -1)
+      -19       profit_eq
+        3       resource_con(H)
+        1       resource_con(M)
+        4       resource_con(W)
+
+produce(D)
+                (.LO, .L, .UP, .M = 0, 55, +INF, 0)
+      -15       profit_eq
+        2       resource_con(H)
+        1       resource_con(M)
+        3       resource_con(W)
+
+produce(C)
+                (.LO, .L, .UP, .M = 0, 25, +INF, 0)
+      -12       profit_eq
+        1       resource_con(H)
+        1       resource_con(M)
+        3       resource_con(W)
+
+REMAINING 2 ENTRIES SKIPPED
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 19
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE books Using LP From line 41
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.250E+02, 4.200E+02] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.900E+01]
+
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 20
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE books Using LP From line 41
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            4
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            6
+NON ZERO ELEMENTS            21
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  44.3.0 8b8fb1cb WEX-WEI
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 21
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE books Using LP From line 41
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   books               OBJECTIVE  profit
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  41
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE             1890.0000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+--- GAMS/CPLEX licensed for continuous and discrete problems.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.01 ticks)
+
+
+Optimal solution found
+Objective:         1890.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU profit_eq           .              .              .             1.0000      
+
+---- EQU resource_con  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+H        -INF          225.0000       225.0000         3.0000      
+M        -INF          125.0000       125.0000         3.0000      
+W        -INF          420.0000       420.0000         2.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR profit            -INF         1890.0000        +INF             .          
+
+---- VAR produce  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+B           .              .            +INF           -1.0000      
+D           .            55.0000        +INF             .          
+C           .            25.0000        +INF             .          
+F           .            45.0000        +INF             .          
+CF          .              .            +INF           -2.0000      
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:01:12 Page 22
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     43 PARAMETER resprof  
+
+2.1   1827.000,    2.2.1 1866.000,    2.2.2 1890.000,    2.2.3 1890.000
+
+
+----     43 VARIABLE produce.L  
+
+D 55.000,    C 25.000,    F 45.000
+
+
+
+EXECUTION TIME       =        0.453 SECONDS      4 MB  44.3.0 8b8fb1cb WEX-WEI
+
+
+USER: Introduction to Optimization (CS/ISyE/ECE 524) G230906|0002AS-GEN
+      UW-Madison, CS Dept., Fall 2023, Prof. Ferris              DCE850
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\shaox\OneDrive\Documents\GAMS\Studio\workspace\hw2\hw2-2.gms
+Output     C:\Users\shaox\OneDrive\Documents\GAMS\Studio\workspace\hw2\hw2-2.lst

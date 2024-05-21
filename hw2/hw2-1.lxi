@@ -1,0 +1,25 @@
+B 3 C o m p i l a t i o n
+B 58 Equation Listing    SOLVE chemmod Using LP From line 40
+D 61 obj1
+D 66 obj2
+D 71 resource_con
+D 80 chem
+B 88 Column Listing      SOLVE chemmod Using LP From line 40
+E 91 blend
+E 99 num_proc
+E 126 num_chem
+B 140 Range Statistics    SOLVE chemmod Using LP From line 40
+B 151 Model Statistics    SOLVE chemmod Using LP From line 40
+B 164 Solution Report     SOLVE chemmod Using LP From line 40
+F 197 obj1
+F 198 obj2
+F 203 resource_con
+F 211 chem
+G 220 blend
+G 222 num_proc
+G 230 num_chem
+B 243 E x e c u t i o n
+I 245 mstat
+I 246 sstat
+I 247 blend
+I 248 proctime

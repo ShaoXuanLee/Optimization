@@ -1,0 +1,272 @@
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:04:22 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  set trees pine.spruce.walnut.Hardwood /P, S, W, H/;
+   2  set site /1, 2, 3, 4/;
+   3   
+   4  parameter
+   5      Area(site, trees) area for each species /1.P 17, 1.S 14, 1.W 10, 1.H 9,
+   6                                               2.P 15, 2.S 16, 2.W 12, 2.H 11,
+   7                                               3.P 13, 3.S 12, 3.W 14, 3.H 8,
+   8                                               4.P 10, 4.S 11, 4.W 8, 4.H 6/,
+   9   
+  10      req_tree(trees) required tree at each site /P 22500, S 9000, W 4800, H 3500/,
+  11   
+  12      net_profit(site,trees) profit at site 1 /1.P 16, 1.S 12, 1.W 20, 1.H 18,
+  13       2.P 14, 2.S 13, 2.W 24, 2.H 20,
+  14       3.P 17, 3.S 10, 3.W 28, 3.H 20,
+  15       4.P 12, 4.S 11, 4.W 18, 4.H 17/,
+  16   
+  17      size(site) size of each site /1 1500, 2 1700, 3 900, 4 600/;
+  18   
+  19  Variable
+  20      pro1,
+  21      pro2,
+  22      pro3,
+  23      pro4,
+  24      profit;
+  25   
+  26  positive variable
+  27      grow(site, trees) "area planted of tree at site";
+  28   
+  29  Equation
+  30      obj,
+  31      con_land(site) limitation on land,
+  32      con_tree(trees) minimum of trees;
+  33   
+  34   
+  35  obj..
+  36  profit =e= sum((site,trees), grow(site, trees) * net_profit(site,trees));
+  37   
+  38  con_land(site)..
+  39      sum(trees, grow(site, trees)) =l= size(site);
+  40   
+  41  con_tree(trees)..
+  42      sum(site, Area(site,trees) * grow(site, trees)) =g= req_tree(trees);
+  43   
+  44   
+  45   
+  46  model forest /all/;
+  47  solve forest using lp maximizing profit;
+  48  option limrow = 0, limcol = 0;
+  49  option solprint=off;
+  50  scalar mstat, sstat;
+  51  mstat = forest.modelstat;
+  52  sstat = forest.solvestat;
+  53  display mstat, sstat;
+  54  display profit.l, grow.l;
+
+**** LIST OF STRAY NAMES - CHECK DECLARATIONS FOR SPURIOUS COMMAS
+**** STRAY NAME pro2 OF TYPE VAR  
+**** STRAY NAME pro3 OF TYPE VAR  
+**** STRAY NAME pro4 OF TYPE VAR  
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.3.0 8b8fb1cb WEX-WEI
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:04:22 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE forest Using LP From line 47
+
+
+---- obj  =E=  
+
+obj..  profit - 16*grow(1,P) - 12*grow(1,S) - 20*grow(1,W) - 18*grow(1,H) - 14*grow(2,P) - 13*grow(2,S) - 24*grow(2,W) - 20*grow(2,H) - 17*grow(3,P) - 10*grow(3,S) - 28*grow(3,W) - 20*grow(3,H) - 12*grow(4,P) - 11*grow(4,S) - 18*grow(4,W) - 17*grow(4,H) =E= 0 ; (LHS = 0)
+     
+
+---- con_land  =L=  limitation on land
+
+con_land(1)..  grow(1,P) + grow(1,S) + grow(1,W) + grow(1,H) =L= 1500 ; (LHS = 0)
+     
+con_land(2)..  grow(2,P) + grow(2,S) + grow(2,W) + grow(2,H) =L= 1700 ; (LHS = 0)
+     
+con_land(3)..  grow(3,P) + grow(3,S) + grow(3,W) + grow(3,H) =L= 900 ; (LHS = 0)
+     
+REMAINING ENTRY SKIPPED
+
+
+---- con_tree  =G=  minimum of trees
+
+con_tree(P)..  17*grow(1,P) + 15*grow(2,P) + 13*grow(3,P) + 10*grow(4,P) =G= 22500 ; (LHS = 0, INFES = 22500 ****)
+     
+con_tree(S)..  14*grow(1,S) + 16*grow(2,S) + 12*grow(3,S) + 11*grow(4,S) =G= 9000 ; (LHS = 0, INFES = 9000 ****)
+     
+con_tree(W)..  10*grow(1,W) + 12*grow(2,W) + 14*grow(3,W) + 8*grow(4,W) =G= 4800 ; (LHS = 0, INFES = 4800 ****)
+     
+REMAINING ENTRY SKIPPED
+
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:04:22 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE forest Using LP From line 47
+
+
+---- profit  
+
+profit
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       obj
+
+
+---- grow  area planted of tree at site
+
+grow(1,P)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -16       obj
+        1       con_land(1)
+       17       con_tree(P)
+
+grow(1,S)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -12       obj
+        1       con_land(1)
+       14       con_tree(S)
+
+grow(1,W)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -20       obj
+        1       con_land(1)
+       10       con_tree(W)
+
+REMAINING 13 ENTRIES SKIPPED
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:04:22 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE forest Using LP From line 47
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 6.000E+02, 2.250E+04] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 2.800E+01]
+
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:04:22 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE forest Using LP From line 47
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS            9
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES           17
+NON ZERO ELEMENTS            49
+
+
+GENERATION TIME      =        0.016 SECONDS      4 MB  44.3.0 8b8fb1cb WEX-WEI
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:04:22 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE forest Using LP From line 47
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   forest              OBJECTIVE  profit
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  47
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE            95031.1887
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         5    2147483647
+--- GAMS/CPLEX licensed for continuous and discrete problems.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.02 ticks)
+
+
+Optimal solution found
+Objective:        95031.188725
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU obj                 .              .              .             1.0000      
+
+---- EQU con_land  limitation on land
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1        -INF         1500.0000      1500.0000        21.6250      
+2        -INF         1700.0000      1700.0000        24.0000      
+3        -INF          900.0000       900.0000        28.0000      
+4        -INF          600.0000       600.0000        18.5625      
+
+---- EQU con_tree  minimum of trees
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+P     22500.0000     22500.0000        +INF           -0.3309      
+S      9000.0000      9000.0000        +INF           -0.6875      
+W      4800.0000     28240.4412        +INF             .          
+H      3500.0000      3500.0000        +INF           -0.2604      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR profit            -INF        95031.1887        +INF             .          
+
+---- VAR grow  area planted of tree at site
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.P          .          1323.5294        +INF             .          
+1.S          .           176.4706        +INF             .          
+1.W          .              .            +INF           -1.6250      
+1.H          .              .            +INF           -1.2813      
+2.P          .              .            +INF           -5.0368      
+2.S          .           396.6299        +INF             .          
+2.W          .          1303.3701        +INF             .          
+2.H          .              .            +INF           -1.1354      
+3.P          .              .            +INF           -6.6985      
+3.S          .              .            +INF           -9.7500      
+3.W          .           900.0000        +INF             .          
+3.H          .              .            +INF           -5.9167      
+4.P          .              .            +INF           -3.2537      
+4.S          .            16.6667        +INF             .          
+4.W          .              .            +INF           -0.5625      
+4.H          .           583.3333        +INF             .          
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 17:04:22 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     53 PARAMETER mstat                =        1.000  
+            PARAMETER sstat                =        1.000  
+
+----     54 VARIABLE profit.L              =    95031.189  
+
+----     54 VARIABLE grow.L  area planted of tree at site
+
+            P           S           W           H
+
+1    1323.529     176.471
+2                 396.630    1303.370
+3                             900.000
+4                  16.667                 583.333
+
+
+
+EXECUTION TIME       =        0.125 SECONDS      4 MB  44.3.0 8b8fb1cb WEX-WEI
+
+
+USER: Introduction to Optimization (CS/ISyE/ECE 524) G230906|0002AS-GEN
+      UW-Madison, CS Dept., Fall 2023, Prof. Ferris              DCE850
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\shaox\OneDrive\Documents\GAMS\Studio\workspace\hw2\hw2-3.gms
+Output     C:\Users\shaox\OneDrive\Documents\GAMS\Studio\workspace\hw2\hw2-3.lst

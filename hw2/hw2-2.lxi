@@ -1,0 +1,56 @@
+B 3 C o m p i l a t i o n
+B 54 Equation Listing    SOLVE books Using LP From line 28
+D 57 profit_eq
+D 62 resource_con
+B 72 Column Listing      SOLVE books Using LP From line 28
+E 75 profit
+E 82 produce
+B 108 Range Statistics    SOLVE books Using LP From line 28
+B 119 Model Statistics    SOLVE books Using LP From line 28
+B 132 Solution Report     SOLVE books Using LP From line 28
+F 165 profit_eq
+F 167 resource_con
+G 177 profit
+G 179 produce
+B 195 Equation Listing    SOLVE books Using LP From line 33
+D 198 profit_eq
+D 203 resource_con
+B 213 Column Listing      SOLVE books Using LP From line 33
+E 216 profit
+E 223 produce
+B 249 Range Statistics    SOLVE books Using LP From line 33
+B 260 Model Statistics    SOLVE books Using LP From line 33
+B 273 Solution Report     SOLVE books Using LP From line 33
+F 306 profit_eq
+F 308 resource_con
+G 318 profit
+G 320 produce
+B 336 Equation Listing    SOLVE books Using LP From line 37
+D 339 profit_eq
+D 344 resource_con
+B 354 Column Listing      SOLVE books Using LP From line 37
+E 357 profit
+E 364 produce
+B 390 Range Statistics    SOLVE books Using LP From line 37
+B 401 Model Statistics    SOLVE books Using LP From line 37
+B 414 Solution Report     SOLVE books Using LP From line 37
+F 447 profit_eq
+F 449 resource_con
+G 459 profit
+G 461 produce
+B 477 Equation Listing    SOLVE books Using LP From line 41
+D 480 profit_eq
+D 485 resource_con
+B 495 Column Listing      SOLVE books Using LP From line 41
+E 498 profit
+E 505 produce
+B 531 Range Statistics    SOLVE books Using LP From line 41
+B 542 Model Statistics    SOLVE books Using LP From line 41
+B 555 Solution Report     SOLVE books Using LP From line 41
+F 588 profit_eq
+F 590 resource_con
+G 600 profit
+G 602 produce
+B 618 E x e c u t i o n
+I 618 resprof
+I 624 produce

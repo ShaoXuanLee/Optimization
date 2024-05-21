@@ -1,0 +1,267 @@
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 19:07:13 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  set P set of processes /p1, p2, p3/;
+   2  set R set of resources /r1, r2, f/;
+   3  set C set of chemicals /c1 ,c2/;
+   4   
+   5  free Variable
+   6      blend;
+   7   
+   8  positive Variable
+   9      num_proc(P) amount of process,
+  10      num_chem(C) amount of chem;
+  11   
+  12  Parameters
+  13      res_proc(R,P) resources per process /r1.p1 9, r1.p2 6, r1.p3 4,
+  14                                           r2.p1 5, r2.p2 8, r2.p3 11,
+  15                                           f.p1 50, f.p2 75, f.p3 100/,
+  16   
+  17      constraint(R) /r1 200, r2 400, f 1850/,
+  18   
+  19      chemical(C ,P) /c1.p1 9, c2.p1 6,
+  20                      c1.p2 7, c2.p2 10,
+  21                      c1.p3 10, c2.p3 6/;
+  22  Equation
+  23      obj1 objective,
+  24      obj2 objective,
+  25      resource_con(R) resource constraint,
+  26      chem(C) number of chemicals;
+  27   
+  28  obj1..
+  29      5* blend =l= num_chem("c1");
+  30  obj2..
+  31      2* blend =l= num_chem("c2");
+  32   
+  33  resource_con(R)..
+  34      sum(P, res_proc(R,P)*num_proc(P)) =l= constraint(R);
+  35   
+  36  chem(C)..
+  37      num_chem(C) =e= sum(P, chemical(C, P)* num_proc(P));
+  38   
+  39  model chemmod /all/;
+  40  solve chemmod using lp maximize blend;
+  41  scalar mstat, sstat;
+  42  mstat = chemmod.modelstat;
+  43  sstat = chemmod.solvestat;
+  44  parameter proctime(P);
+  45  proctime(P) = num_proc.l(P);
+  46  display mstat, sstat, blend.l, proctime;
+  47   
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.3.0 8b8fb1cb WEX-WEI
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 19:07:13 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE chemmod Using LP From line 40
+
+
+---- obj1  =L=  objective
+
+obj1..  5*blend - num_chem(c1) =L= 0 ; (LHS = 0)
+     
+
+---- obj2  =L=  objective
+
+obj2..  2*blend - num_chem(c2) =L= 0 ; (LHS = 0)
+     
+
+---- resource_con  =L=  resource constraint
+
+resource_con(r1)..  9*num_proc(p1) + 6*num_proc(p2) + 4*num_proc(p3) =L= 200 ; (LHS = 0)
+     
+resource_con(r2)..  5*num_proc(p1) + 8*num_proc(p2) + 11*num_proc(p3) =L= 400 ; (LHS = 0)
+     
+resource_con(f)..  50*num_proc(p1) + 75*num_proc(p2) + 100*num_proc(p3) =L= 1850 ; (LHS = 0)
+     
+
+---- chem  =E=  number of chemicals
+
+chem(c1)..  - 9*num_proc(p1) - 7*num_proc(p2) - 10*num_proc(p3) + num_chem(c1) =E= 0 ; (LHS = 0)
+     
+chem(c2)..  - 6*num_proc(p1) - 10*num_proc(p2) - 6*num_proc(p3) + num_chem(c2) =E= 0 ; (LHS = 0)
+     
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 19:07:13 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE chemmod Using LP From line 40
+
+
+---- blend  
+
+blend
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        5       obj1
+        2       obj2
+
+
+---- num_proc  amount of process
+
+num_proc(p1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        9       resource_con(r1)
+        5       resource_con(r2)
+       50       resource_con(f)
+       -9       chem(c1)
+       -6       chem(c2)
+
+num_proc(p2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        6       resource_con(r1)
+        8       resource_con(r2)
+       75       resource_con(f)
+       -7       chem(c1)
+      -10       chem(c2)
+
+num_proc(p3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        4       resource_con(r1)
+       11       resource_con(r2)
+      100       resource_con(f)
+      -10       chem(c1)
+       -6       chem(c2)
+
+
+---- num_chem  amount of chem
+
+num_chem(c1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       obj1
+        1       chem(c1)
+
+num_chem(c2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       obj2
+        1       chem(c2)
+
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 19:07:13 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE chemmod Using LP From line 40
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 2.000E+02, 1.850E+03] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.000E+02]
+
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 19:07:13 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE chemmod Using LP From line 40
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           4     SINGLE EQUATIONS            7
+BLOCKS OF VARIABLES           3     SINGLE VARIABLES            6
+NON ZERO ELEMENTS            21
+
+
+GENERATION TIME      =        0.079 SECONDS      4 MB  44.3.0 8b8fb1cb WEX-WEI
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 19:07:13 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE chemmod Using LP From line 40
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   chemmod             OBJECTIVE  blend
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  40
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE               51.4000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         4    2147483647
+--- GAMS/CPLEX licensed for continuous and discrete problems.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.02 ticks)
+
+
+Optimal solution found
+Objective:           51.400000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU obj1              -INF             .              .             0.2000      
+---- EQU obj2              -INF          -62.2000          .              .          
+
+  obj1  objective
+  obj2  objective
+
+---- EQU resource_con  resource constraint
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+r1        -INF          200.0000       200.0000         0.1143      
+r2        -INF          194.5000       400.0000          .          
+f         -INF         1850.0000      1850.0000         0.0154      
+
+---- EQU chem  number of chemicals
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+c1          .              .              .             0.2000      
+c2          .              .              .             EPS         
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR blend             -INF           51.4000        +INF             .          
+
+---- VAR num_proc  amount of process
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+p1          .            18.0000        +INF             .          
+p2          .              .            +INF           -0.4429      
+p3          .             9.5000        +INF             .          
+
+---- VAR num_chem  amount of chem
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+c1          .           257.0000        +INF             .          
+c2          .           165.0000        +INF             .          
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 19:07:13 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     46 PARAMETER mstat                =        1.000  
+            PARAMETER sstat                =        1.000  
+            VARIABLE blend.L               =       51.400  
+
+----     46 PARAMETER proctime  
+
+p1 18.000,    p3  9.500
+
+
+
+EXECUTION TIME       =        0.547 SECONDS      4 MB  44.3.0 8b8fb1cb WEX-WEI
+
+
+USER: Introduction to Optimization (CS/ISyE/ECE 524) G230906|0002AS-GEN
+      UW-Madison, CS Dept., Fall 2023, Prof. Ferris              DCE850
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\shaox\OneDrive\Documents\GAMS\Studio\workspace\hw2\hw2-1.gms
+Output     C:\Users\shaox\OneDrive\Documents\GAMS\Studio\workspace\hw2\hw2-1.lst
