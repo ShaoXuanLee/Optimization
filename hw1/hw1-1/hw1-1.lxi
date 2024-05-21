@@ -1,0 +1,27 @@
+B 3 C o m p i l a t i o n
+B 40 Equation Listing    SOLVE question1 Using LP From line 27
+D 43 eq1
+D 48 eq2
+D 53 eq3
+D 58 objeq
+B 64 Column Listing      SOLVE question1 Using LP From line 27
+E 67 x1
+E 77 x2
+E 86 x3
+E 95 obj
+B 103 Range Statistics    SOLVE question1 Using LP From line 27
+B 114 Model Statistics    SOLVE question1 Using LP From line 27
+B 127 Solution Report     SOLVE question1 Using LP From line 27
+F 160 eq1
+F 161 eq2
+F 162 eq3
+F 163 objeq
+G 172 x1
+G 173 x2
+G 174 x3
+G 175 obj
+B 185 E x e c u t i o n
+I 187 objval
+I 188 x1val
+I 189 x2val
+I 190 x3val

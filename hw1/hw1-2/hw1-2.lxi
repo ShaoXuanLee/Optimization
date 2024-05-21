@@ -1,0 +1,17 @@
+B 3 C o m p i l a t i o n
+B 43 Equation Listing    SOLVE softsuds Using LP From line 29
+D 46 profit_eq
+D 51 resource_con
+B 61 Column Listing      SOLVE softsuds Using LP From line 29
+E 64 Profit
+E 71 quant
+B 89 Range Statistics    SOLVE softsuds Using LP From line 29
+B 100 Model Statistics    SOLVE softsuds Using LP From line 29
+B 113 Solution Report     SOLVE softsuds Using LP From line 29
+F 146 profit_eq
+F 150 resource_con
+G 160 Profit
+G 162 quant
+B 175 E x e c u t i o n
+I 177 Profit
+I 178 quant

@@ -1,0 +1,17 @@
+B 3 C o m p i l a t i o n
+B 41 Equation Listing    SOLVE prodmix Using LP From line 29
+D 44 profit_eq
+D 49 resource_con
+B 59 Column Listing      SOLVE prodmix Using LP From line 29
+E 62 Profit
+E 69 make
+B 87 Range Statistics    SOLVE prodmix Using LP From line 29
+B 98 Model Statistics    SOLVE prodmix Using LP From line 29
+B 111 Solution Report     SOLVE prodmix Using LP From line 29
+F 144 profit_eq
+F 146 resource_con
+G 156 Profit
+G 158 make
+B 171 E x e c u t i o n
+I 173 Profit
+I 174 make

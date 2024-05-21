@@ -1,0 +1,197 @@
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/13/23 22:11:48 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  set I /"Light Beer", "Dark Beer"/;
+   2  set R /Malt, Hops, Yeast/;
+   3   
+   4  table a(R, I) "Per-Unit resource requirements"
+   5              "Light Beer"   "Dark Beer"
+   6  Malt            2            3
+   7  Hops            3            1
+   8  Yeast           2          [5/3] ;
+   9   
+  10  parameters
+  11      c(I) /"Light Beer" 2, "Dark Beer" 1/
+  12      b(R) /Malt 90, Hops 40, Yeast 80/ ;
+  13   
+  14  free variable Profit;
+  15   
+  16  positive variable quant(I) "number of each beer";
+  17   
+  18  Equations
+  19      profit_eq "profit equations",
+  20      resource_con(R) "resource limit";
+  21   
+  22  profit_eq..
+  23      Profit =e= sum(I, c(I)*quant(I));
+  24   
+  25  resource_con(R)..
+  26      sum(I, a(R,I)*quant(I)) =l= b(R);
+  27   
+  28  model softsuds /all/;
+  29  solve softsuds using lp maximizing Profit;
+  30  display Profit.l, quant.l;
+  31   
+  32   
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.3.0 8b8fb1cb WEX-WEI
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/13/23 22:11:48 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE softsuds Using LP From line 29
+
+
+---- profit_eq  =E=  profit equations
+
+profit_eq..  Profit - 2*quant(Light Beer) - quant(Dark Beer) =E= 0 ; (LHS = 0)
+     
+
+---- resource_con  =L=  resource limit
+
+resource_con(Malt)..  2*quant(Light Beer) + 3*quant(Dark Beer) =L= 90 ; (LHS = 0)
+     
+resource_con(Hops)..  3*quant(Light Beer) + quant(Dark Beer) =L= 40 ; (LHS = 0)
+     
+resource_con(Yeast)..  2*quant(Light Beer) + 1.66666666666667*quant(Dark Beer) =L= 80 ; (LHS = 0)
+     
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/13/23 22:11:48 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE softsuds Using LP From line 29
+
+
+---- Profit  
+
+Profit
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       profit_eq
+
+
+---- quant  number of each beer
+
+quant(Light Beer)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -2       profit_eq
+        2       resource_con(Malt)
+        3       resource_con(Hops)
+        2       resource_con(Yeast)
+
+quant(Dark Beer)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       profit_eq
+        3       resource_con(Malt)
+        1       resource_con(Hops)
+        1.6667  resource_con(Yeast)
+
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/13/23 22:11:48 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE softsuds Using LP From line 29
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 4.000E+01, 9.000E+01] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 3.000E+00]
+
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/13/23 22:11:48 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE softsuds Using LP From line 29
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            4
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            3
+NON ZERO ELEMENTS             9
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  44.3.0 8b8fb1cb WEX-WEI
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/13/23 22:11:48 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE softsuds Using LP From line 29
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   softsuds            OBJECTIVE  Profit
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  29
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE               35.7143
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         2    2147483647
+--- GAMS/CPLEX licensed for continuous and discrete problems.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.01 ticks)
+
+
+Optimal solution found
+Objective:           35.714286
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU profit_eq           .              .              .             1.0000      
+
+  profit_eq  profit equations
+
+---- EQU resource_con  resource limit
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+Malt         -INF           90.0000        90.0000         0.1429      
+Hops         -INF           40.0000        40.0000         0.5714      
+Yeast        -INF           53.8095        80.0000          .          
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR Profit            -INF           35.7143        +INF             .          
+
+---- VAR quant  number of each beer
+
+                  LOWER          LEVEL          UPPER         MARGINAL
+
+Light Beer          .             4.2857        +INF             .          
+Dark Beer           .            27.1429        +INF             .          
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/13/23 22:11:48 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     30 VARIABLE Profit.L              =       35.714  
+
+----     30 VARIABLE quant.L  number of each beer
+
+Light Beer  4.286,    Dark Beer  27.143
+
+
+
+EXECUTION TIME       =        0.031 SECONDS      4 MB  44.3.0 8b8fb1cb WEX-WEI
+
+
+USER: Introduction to Optimization (CS/ISyE/ECE 524) G230906|0002AS-GEN
+      UW-Madison, CS Dept., Fall 2023, Prof. Ferris              DCE850
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\shaox\OneDrive\Documents\GAMS\Studio\workspace\hw1\hw1-2\hw1-2.gms
+Output     C:\Users\shaox\OneDrive\Documents\GAMS\Studio\workspace\hw1\hw1-2\hw1-2.lst

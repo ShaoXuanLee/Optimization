@@ -1,0 +1,193 @@
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 05:58:55 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  set I /p1, p2/;
+   2  set R /s1, s2, s3/;
+   3   
+   4  table a(R, I) "Per-Unit resource requirements"
+   5          p1      p2
+   6  s1      5       10
+   7  s2      9       2
+   8  s3      7       5   ;
+   9   
+  10  Parameters
+  11      c(I) /p1 108, p2 84/
+  12      b(R) /s1 40, s2 40, s3 40/
+  13      hours(I) /p1 10, p2 8/;
+  14   
+  15  free variable Profit;
+  16  positive variable make(I) "number of p1 and p2 made";
+  17   
+  18  equations
+  19      profit_eq,
+  20      resource_con(R);
+  21   
+  22  profit_eq..
+  23      Profit =e= sum(I, (make(I) * (c(I) - 5 * hours(I))));
+  24   
+  25  resource_con(R)..
+  26      sum(I, a(R,I)*make(I)) =l= b(R);
+  27   
+  28  model prodmix /all/;
+  29  solve prodmix using lp maximize Profit;
+  30  display Profit.l, make.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.3.0 8b8fb1cb WEX-WEI
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 05:58:55 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE prodmix Using LP From line 29
+
+
+---- profit_eq  =E=  
+
+profit_eq..  Profit - 58*make(p1) - 44*make(p2) =E= 0 ; (LHS = 0)
+     
+
+---- resource_con  =L=  
+
+resource_con(s1)..  5*make(p1) + 10*make(p2) =L= 40 ; (LHS = 0)
+     
+resource_con(s2)..  9*make(p1) + 2*make(p2) =L= 40 ; (LHS = 0)
+     
+resource_con(s3)..  7*make(p1) + 5*make(p2) =L= 40 ; (LHS = 0)
+     
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 05:58:55 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE prodmix Using LP From line 29
+
+
+---- Profit  
+
+Profit
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       profit_eq
+
+
+---- make  number of p1 and p2 made
+
+make(p1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -58       profit_eq
+        5       resource_con(s1)
+        9       resource_con(s2)
+        7       resource_con(s3)
+
+make(p2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -44       profit_eq
+       10       resource_con(s1)
+        2       resource_con(s2)
+        5       resource_con(s3)
+
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 05:58:55 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE prodmix Using LP From line 29
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 4.000E+01, 4.000E+01] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 5.800E+01]
+
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 05:58:55 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE prodmix Using LP From line 29
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            4
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            3
+NON ZERO ELEMENTS             9
+
+
+GENERATION TIME      =        0.031 SECONDS      4 MB  44.3.0 8b8fb1cb WEX-WEI
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 05:58:55 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE prodmix Using LP From line 29
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   prodmix             OBJECTIVE  Profit
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  29
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE              320.0000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         2    2147483647
+--- GAMS/CPLEX licensed for continuous and discrete problems.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.01 ticks)
+
+
+Optimal solution found
+Objective:          320.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU profit_eq           .              .              .             1.0000      
+
+---- EQU resource_con  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+s1        -INF           40.0000        40.0000         3.5000      
+s2        -INF           40.0000        40.0000         4.5000      
+s3        -INF           38.0000        40.0000          .          
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR Profit            -INF          320.0000        +INF             .          
+
+---- VAR make  number of p1 and p2 made
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+p1          .             4.0000        +INF             .          
+p2          .             2.0000        +INF             .          
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.3.0  8b8fb1cb Sep 1, 2023           WEX-WEI x86 64bit/MS Windows - 09/22/23 05:58:55 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     30 VARIABLE Profit.L              =      320.000  
+
+----     30 VARIABLE make.L  number of p1 and p2 made
+
+p1 4.000,    p2 2.000
+
+
+
+EXECUTION TIME       =        0.203 SECONDS      4 MB  44.3.0 8b8fb1cb WEX-WEI
+
+
+USER: Introduction to Optimization (CS/ISyE/ECE 524) G230906|0002AS-GEN
+      UW-Madison, CS Dept., Fall 2023, Prof. Ferris              DCE850
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\shaox\OneDrive\Documents\GAMS\Studio\workspace\hw1\hw1-3\hw1-3.gms
+Output     C:\Users\shaox\OneDrive\Documents\GAMS\Studio\workspace\hw1\hw1-3\hw1-3.lst
